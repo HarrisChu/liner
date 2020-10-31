@@ -863,22 +863,22 @@ mainLoop:
 				}
 			case wordLeft, altB:
 				if pos > 0 {
-                    for {
-                        if pos == 0 ||
-                            unicode.IsLetter(line[pos-1]) ||
-                            unicode.IsNumber(line[pos-1]) {
-                            break
-                        }
-                        pos--
-                    }
-                    for {
-                        if pos == 0 ||
-                            (!unicode.IsNumber(line[pos-1]) &&
-                            !unicode.IsLetter(line[pos-1])) {
-                            break
-                        }
-                        pos--
-                    }
+					for {
+						if pos == 0 ||
+							unicode.IsLetter(line[pos-1]) ||
+							unicode.IsNumber(line[pos-1]) {
+							break
+						}
+						pos--
+					}
+					for {
+						if pos == 0 ||
+							(!unicode.IsNumber(line[pos-1]) &&
+								!unicode.IsLetter(line[pos-1])) {
+							break
+						}
+						pos--
+					}
 				} else {
 					s.doBeep()
 				}
@@ -890,21 +890,21 @@ mainLoop:
 				}
 			case wordRight, altF:
 				if pos < len(line) {
-					var spaceHere, spaceLeft, hereKnown bool
 					for {
+						if pos == len(line) ||
+							unicode.IsNumber(line[pos]) ||
+							unicode.IsLetter(line[pos]) {
+							break
+						}
 						pos++
-						if pos == len(line) {
+					}
+					for {
+						if pos == len(line) ||
+							(!unicode.IsNumber(line[pos]) &&
+								!unicode.IsLetter(line[pos])) {
 							break
 						}
-						if hereKnown {
-							spaceLeft = spaceHere
-						} else {
-							spaceLeft = unicode.IsSpace(line[pos-1])
-						}
-						spaceHere, hereKnown = unicode.IsSpace(line[pos]), true
-						if spaceHere && !spaceLeft {
-							break
-						}
+						pos++
 					}
 				} else {
 					s.doBeep()
@@ -1147,8 +1147,8 @@ func (s *State) eraseWord(pos int, line []rune, killAction int) (int, []rune, in
 	var buf []rune // Store the deleted chars in a buffer
 	for {
 		if pos == 0 ||
-            unicode.IsLetter(line[pos-1]) ||
-            unicode.IsNumber(line[pos-1]) {
+			unicode.IsLetter(line[pos-1]) ||
+			unicode.IsNumber(line[pos-1]) {
 			break
 		}
 		buf = append(buf, line[pos-1])
@@ -1158,8 +1158,8 @@ func (s *State) eraseWord(pos int, line []rune, killAction int) (int, []rune, in
 	// Remove non-whitespace to the left
 	for {
 		if pos == 0 ||
-            (!unicode.IsNumber(line[pos-1]) &&
-            !unicode.IsLetter(line[pos-1])) {
+			(!unicode.IsNumber(line[pos-1]) &&
+				!unicode.IsLetter(line[pos-1])) {
 			break
 		}
 		buf = append(buf, line[pos-1])
