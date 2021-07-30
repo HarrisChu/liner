@@ -21,6 +21,7 @@ type commonState struct {
 	outputRedirected  bool
 	inputRedirected   bool
 	history           []string
+	newlyAddedHistory []string
 	historyMutex      sync.RWMutex
 	completer         WordCompleter
 	columns           int
@@ -118,7 +119,7 @@ func (s *State) WriteHistory(w io.Writer) (num int, err error) {
 	s.historyMutex.RLock()
 	defer s.historyMutex.RUnlock()
 
-	for _, item := range s.history {
+	for _, item := range s.newlyAddedHistory {
 		_, err := fmt.Fprintln(w, item)
 		if err != nil {
 			return num, err
@@ -140,6 +141,7 @@ func (s *State) AppendHistory(item string) {
 		}
 	}
 	s.history = append(s.history, item)
+	s.newlyAddedHistory = append(s.newlyAddedHistory, item)
 	if len(s.history) > HistoryLimit {
 		s.history = s.history[1:]
 	}
