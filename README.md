@@ -52,7 +52,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/dutor/liner"
+	"github.com/jievince/liner"
 )
 
 var (

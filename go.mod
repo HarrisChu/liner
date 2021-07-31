@@ -1,4 +1,4 @@
-module github.com/dutor/liner
+module github.com/jievince/liner
 
 go 1.11
 
