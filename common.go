@@ -13,7 +13,7 @@ import (
 	"io"
 	"strings"
 	"sync"
-	"unicode/utf8"
+	// "unicode/utf8"
 )
 
 type commonState struct {
@@ -86,19 +86,19 @@ func (s *State) ReadHistory(r io.Reader) (num int, err error) {
 	in := bufio.NewReader(r)
 	num = 0
 	for {
-		line, part, err := in.ReadLine()
+		line, _, err := in.ReadLine()
 		if err == io.EOF {
 			break
 		}
 		if err != nil {
 			return num, err
 		}
-		if part {
-			return num, fmt.Errorf("line %d is too long", num+1)
-		}
-		if !utf8.Valid(line) {
-			return num, fmt.Errorf("invalid string at line %d", num+1)
-		}
+		// if part {
+		// 	return num, fmt.Errorf("line %d is too long", num+1)
+		// }
+		// if !utf8.Valid(line) {
+		// 	return num, fmt.Errorf("invalid string at line %d", num+1)
+		// }
 		num++
 		s.history = append(s.history, string(line))
 		if len(s.history) > HistoryLimit {
