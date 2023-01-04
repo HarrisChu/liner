@@ -170,12 +170,36 @@ func (s *State) getHistoryByPattern(pattern string) (ph []string, pos []int) {
 		return
 	}
 	for _, h := range s.history {
-		if i := strings.Index(h, pattern); i >= 0 {
+		if i := indexRune([]rune(h), []rune(pattern)); i >= 0 {
 			ph = append(ph, h)
 			pos = append(pos, i)
 		}
 	}
 	return
+}
+
+func indexRune(runes, pattern []rune) int {
+	if len(pattern) == 0 {
+		return 0
+	}
+	for i := 0; i < len(runes); i++ {
+		if runes[i] == pattern[0] {
+			if len(pattern) == 1 {
+				return i
+			}
+			found := true
+			for j := 1; j < len(pattern); j++ {
+				if runes[i+j] != pattern[j] {
+					found = false
+					break
+				}
+			}
+			if found {
+				return i
+			}
+		}
+	}
+	return -1
 }
 
 // Completer takes the currently edited line content at the left of the cursor
